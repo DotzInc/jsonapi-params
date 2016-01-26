@@ -1,8 +1,6 @@
 # Jsonapi::Params
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/jsonapi/params`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem handles the parameters of a request that uses the jsonapi specification and provides simple control over input parameters and manipulation of attributes, relationships and other...
 
 ## Installation
 
@@ -22,7 +20,91 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use jsonapi-params you should create a class to handle with your parameters. Example:
+
+```ruby
+class AuthorParam
+  include JSONAPI::Param
+
+  params :name
+end
+
+class ArticleParam
+  include JSONAPI::Param
+
+  params :title, :text, :other_text
+
+  belongs_to :author
+end
+
+article = ArticleParam.new(
+  'data' => {
+    'id' => 1,
+    'type' => 'x',
+    'attributes' => {
+      'title' => 'The guy',
+      'text' => 'Loren Ipsun',
+      'other-text' => 'Hello'
+    },
+    'relationships' => {
+      'author' => {
+        'data' => {
+          'id' => 123,
+          'type' => 'authors',
+          'attributes' => {
+            'name' => 'Antonio'
+          }
+        }
+      }
+    }
+  }
+)
+```
+
+### Available methods to handle with params
+
+#### param
+
+Adds a parameter to whitelist attributes
+
+```ruby
+class AuthorParam
+  param :name
+  param :gender
+end
+```
+
+#### params
+
+Adds a list of parameters to whitelist attributes
+
+```ruby
+class AuthorParam
+  params :name, :gender
+end
+```
+
+#### belongs_to
+
+Creates a one-to-one relationship to update or create objects
+
+```ruby
+class AuthorParam
+  param :name
+end
+
+class ArticleParam
+  param :title
+
+  belongs_to :author
+end
+```
+
+## TODO
+
+* one-to-many relationships
+* many-to-many relationships
+* metadata
 
 ## Development
 
@@ -34,3 +116,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/jsonapi-params.
 
+## License
+
+jsonapi-params is released under the MIT License.
