@@ -9,7 +9,7 @@ module JSONAPI
     end
 
     module ClassMethods
-      attr_accessor :whitelist_attributes
+      attr_accessor :whitelist_attributes, :whitelist_relationships
 
       def param(name)
         add_param(name)
@@ -22,6 +22,11 @@ module JSONAPI
       def add_param(name)
         @whitelist_attributes ||= []
         @whitelist_attributes << name.to_s.dasherize
+      end
+
+      def belongs_to(relationship_names)
+        @whitelist_relationships ||= []
+        @whitelist_relationships << relationship_names.to_s.dasherize
       end
     end
 
@@ -49,6 +54,7 @@ module JSONAPI
 
       def relationships
         relationships = @data['relationships'] || {}
+        relationships = relationships.slice(*self.class.whitelist_relationships)
 
         relationships.inject({}) do |relationships, (relationship_key, relationship_object)|
           data = relationship_object['data']
@@ -56,11 +62,19 @@ module JSONAPI
           if data.is_a?(Array)
             raise 'Many-to-many relationship is not supported'
           elsif data.is_a?(Hash)
-            relationships["#{relationship_key}_id"] = data['id']
+            params = params_klass(relationship_key).new(relationship_object)
+
+            relationships["#{relationship_key}_id"] = params.id
           end
 
           relationships
         end
+      end
+
+      private
+
+      def params_klass(key)
+        "#{key}Param".classify.constantize
       end
     end
   end
