@@ -2,7 +2,7 @@ require 'active_support/core_ext/hash/slice'
 require 'active_support/core_ext/string/inflections'
 
 module JSONAPI
-  module Params
+  module Param
     def self.included(target)
       target.send(:include, InstanceMethods)
       target.extend ClassMethods
@@ -32,7 +32,7 @@ module JSONAPI
 
     module InstanceMethods
       def initialize(params)
-        raise InvalidParams, 'Data is required' if params.nil? || params['data'].nil?
+        raise InvalidParam, 'Data is required' if params.nil? || params['data'].nil?
 
         @data = params['data']
       end

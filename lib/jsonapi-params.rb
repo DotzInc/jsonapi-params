@@ -1,8 +1,8 @@
 require 'jsonapi-params/version'
-require 'jsonapi-params/params'
+require 'jsonapi-params/param'
 
 module JSONAPI
-  module Params
-    class InvalidParams < StandardError; end
+  module Param
+    class InvalidParam < StandardError; end
   end
 end
