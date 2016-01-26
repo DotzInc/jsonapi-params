@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Noverde Team"]
   spec.email         = ["dev@noverde.com.br"]
 
-  spec.description   = %q{Gem to handle with parameters according to jsonapi specification}
+  spec.summary       = %q{Gem to handle with parameters according to jsonapi specification}
   spec.homepage      = "https://github.com/Noverde/jsonapi-params"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
