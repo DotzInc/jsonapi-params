@@ -11,22 +11,42 @@ module JSONAPI
     module ClassMethods
       attr_accessor :whitelist_attributes, :whitelist_relationships
 
+      # Adds the parameters to whitelist of parameters
+      #
+      # @param name [Symbol] The name of parameter
+      # @return [nil]
       def param(name)
         add_param(name)
       end
 
+      # Adds a list of parameters to whitelist of parameters
+      #
+      # @param name [Array<Symbol>] Names of parameters
+      # @return [nil]
       def params(*names)
         names.each { |name| add_param(name) }
       end
 
-      def add_param(name)
-        @whitelist_attributes ||= []
-        @whitelist_attributes << name.to_s.dasherize
-      end
-
+      # Adds a relationship one-to-one to whitelist of relationships
+      #
+      # @param name [Array<Symbol>] Names of relationships
+      # @return [nil]
       def belongs_to(relationship_names)
         @whitelist_relationships ||= []
         @whitelist_relationships << relationship_names.to_s.dasherize
+      end
+
+      private
+
+      # Creates the whitelist of attributes
+      #
+      # @param [Symbol]
+      # @return [nil]
+      # @!scope class
+      # @!visibility private
+      def add_param(name)
+        @whitelist_attributes ||= []
+        @whitelist_attributes << name.to_s.dasherize
       end
     end
 
@@ -37,14 +57,21 @@ module JSONAPI
         @data = params['data']
       end
 
+      # @returns [Integer]
+      # @!attribute [r]
       def id
         @data['id']
       end
 
+      # @returns [String]
+      # @!attribute [r]
       def type
         @data['type']
       end
 
+      # Handles parameters to return sanitized attributes and their relationships
+      #
+      # @return [Hash]
       def attributes
         attributes = @data['attributes'] || {}
         attributes = attributes.slice(*self.class.whitelist_attributes)
@@ -52,6 +79,10 @@ module JSONAPI
         attributes
       end
 
+      # Handles parameters to return relationships
+      #
+      # @return [Hash]
+      # @raise [RuntimeError] if the relationship is a one-to-many relationship.
       def relationships
         relationships = @data['relationships'] || {}
         relationships = relationships.slice(*self.class.whitelist_relationships)
@@ -60,7 +91,7 @@ module JSONAPI
           data = relationship_object['data']
 
           if data.is_a?(Array)
-            raise 'Many-to-many relationship is not supported'
+            raise 'One-to-many relationship is not supported'
           elsif data.is_a?(Hash)
             params = params_klass(relationship_key).new(relationship_object)
 
@@ -73,6 +104,11 @@ module JSONAPI
 
       private
 
+      # Get the key to create a constant of param class.
+      #
+      # @param [String]
+      # @return [Object]
+      # @!visibility private
       def params_klass(key)
         "#{key}Param".classify.constantize
       end
