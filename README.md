@@ -100,6 +100,19 @@ class ArticleParam
 end
 ```
 
+#### attributes
+
+Returns a list of attributes based on whitelist.
+
+```ruby
+class ArticleParam
+  param :title
+end
+
+article_params = ArticleParam.new('data' => { 'attributes' => { 'title' => 'The day' }})
+article_params.attributes # { 'title' => 'The day' }
+```
+
 ## TODO
 
 * one-to-many relationships
