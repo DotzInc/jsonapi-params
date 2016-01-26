@@ -5,7 +5,7 @@ require 'jsonapi-params/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "jsonapi-params"
-  spec.version       = JSONAPI::Params::VERSION
+  spec.version       = JSONAPI::Param::VERSION
   spec.authors       = ["Noverde Team"]
   spec.email         = ["dev@noverde.com.br"]
 
