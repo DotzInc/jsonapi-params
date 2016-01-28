@@ -31,9 +31,12 @@ module JSONAPI
       #
       # @param name [Array<Symbol>] Names of relationships
       # @return [nil]
-      def belongs_to(relationship_names)
+      def belongs_to(relationship_name)
+        relationship_name = relationship_name.to_s
+
         @whitelist_relationships ||= []
-        @whitelist_relationships << relationship_names.to_s.dasherize
+        @whitelist_relationships << relationship_name.dasherize
+        @whitelist_relationships << relationship_name.underscore unless @whitelist_relationships.include?(relationship_name.underscore)
       end
 
       private
@@ -45,8 +48,11 @@ module JSONAPI
       # @!scope class
       # @!visibility private
       def add_param(name)
+        name = name.to_s
+
         @whitelist_attributes ||= []
-        @whitelist_attributes << name.to_s.dasherize
+        @whitelist_attributes << name.dasherize
+        @whitelist_attributes << name.underscore unless @whitelist_attributes.include?(name.underscore)
       end
     end
 
@@ -76,7 +82,11 @@ module JSONAPI
         attributes = @data['attributes'] || {}
         attributes = attributes.slice(*self.class.whitelist_attributes)
         attributes = attributes.merge(relationships)
-        attributes
+
+        attributes.inject({}) do |attributes, (key, value)|
+          attributes[key.to_s.underscore.to_sym] = value
+          attributes
+        end
       end
 
       # Handles parameters to return relationships

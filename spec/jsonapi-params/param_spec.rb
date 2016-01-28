@@ -20,7 +20,7 @@ describe JSONAPI::Param do
     end
 
     it 'adds a dasherized attribute to whitelist of attributes' do
-      expect(FakeParam.whitelist_attributes).to eq(['name', 'full-name'])
+      expect(FakeParam.whitelist_attributes).to eq(['name', 'full-name', 'full_name'])
     end
   end
 
@@ -32,7 +32,7 @@ describe JSONAPI::Param do
     end
 
     it 'adds a dasherized attributes to whitelist of attributes' do
-      expect(FakeParams.whitelist_attributes).to eq(['name', 'full-name'])
+      expect(FakeParams.whitelist_attributes).to eq(['name', 'full-name', 'full_name'])
     end
   end
 
@@ -92,7 +92,7 @@ describe JSONAPI::Param do
     }
 
     it 'returns attribute list and their relationships based on whitelist' do
-      expect(param.attributes).to eq({'name' => 'Jony', 'full-name' => 'Jony Santos', 'gender_id' => 99})
+      expect(param.attributes).to eq({name: 'Jony', full_name: 'Jony Santos', gender_id: 99})
     end
   end
 
