@@ -105,7 +105,7 @@ module JSONAPI
           elsif data.is_a?(Hash)
             params = params_klass(relationship_key).new(relationship_object)
 
-            relationships["#{relationship_key}_id"] = params.id
+            relationships["#{relationship_key}_id".to_sym] = params.id
           end
 
           relationships

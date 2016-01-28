@@ -119,7 +119,7 @@ describe JSONAPI::Param do
     }
 
     it 'returns relationship list based on whitelist' do
-      expect(param.relationships).to eq({'gender_id' => 99})
+      expect(param.relationships).to eq({gender_id: 99})
     end
   end
 end
