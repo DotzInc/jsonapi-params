@@ -83,7 +83,7 @@ module JSONAPI
         attributes = attributes.slice(*self.class.whitelist_attributes)
         attributes = attributes.merge(relationships)
 
-        attributes.inject({}) do |attributes, (key, value)|
+        attributes.to_h.inject({}) do |attributes, (key, value)|
           attributes[key.to_s.underscore.to_sym] = value
           attributes
         end
@@ -97,7 +97,7 @@ module JSONAPI
         relationships = @data['relationships'] || {}
         relationships = relationships.slice(*self.class.whitelist_relationships)
 
-        relationships.inject({}) do |relationships, (relationship_key, relationship_object)|
+        relationships.to_h.inject({}) do |relationships, (relationship_key, relationship_object)|
           data = relationship_object['data']
 
           if data.is_a?(Array)
