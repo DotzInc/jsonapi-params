@@ -82,7 +82,7 @@ module JSONAPI
         attributes = @data['attributes'] || {}
         attributes = attributes.slice(*self.class.whitelist_attributes)
         attributes = attributes.merge(relationships)
-        collection_attributes = strong_parameters?(attributes) ? attributes.to_unsafe_h : attributes.to_h
+        collection_attributes = strong_parameters? ? attributes.to_unsafe_h : attributes.to_h
 
         collection_attributes.inject({}) do |attributes, (key, value)|
           attributes[key.to_s.underscore.to_sym] = value
@@ -129,7 +129,7 @@ module JSONAPI
       # @param [Hash]
       # @return [Boolean]
       # @!visibility private
-      def strong_parameters?(attrs)
+      def strong_parameters?
         Object.const_defined?('ActionController::Parameters')
       end
     end
