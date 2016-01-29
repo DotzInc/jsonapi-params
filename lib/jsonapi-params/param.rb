@@ -126,7 +126,6 @@ module JSONAPI
 
       # Are the attributes an ActionController::Parameters instance?
       #
-      # @param [Hash]
       # @return [Boolean]
       # @!visibility private
       def strong_parameters?
