@@ -82,8 +82,9 @@ module JSONAPI
         attributes = @data['attributes'] || {}
         attributes = attributes.slice(*self.class.whitelist_attributes)
         attributes = attributes.merge(relationships)
+        collection_attributes = strong_parameters? ? attributes.to_unsafe_h : attributes.to_h
 
-        attributes.to_h.inject({}) do |attributes, (key, value)|
+        collection_attributes.inject({}) do |attributes, (key, value)|
           attributes[key.to_s.underscore.to_sym] = value
           attributes
         end
@@ -121,6 +122,14 @@ module JSONAPI
       # @!visibility private
       def params_klass(key)
         "#{key}Param".classify.constantize
+      end
+
+      # Are the attributes an ActionController::Parameters instance?
+      #
+      # @return [Boolean]
+      # @!visibility private
+      def strong_parameters?
+        Object.const_defined?('ActionController::Parameters') && @data.is_a?(ActionController::Parameters)
       end
     end
   end
