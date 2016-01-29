@@ -129,7 +129,7 @@ module JSONAPI
       # @return [Boolean]
       # @!visibility private
       def strong_parameters?
-        Object.const_defined?('ActionController::Parameters')
+        Object.const_defined?('ActionController::Parameters') && @data.is_a?(ActionController::Parameters)
       end
     end
   end
