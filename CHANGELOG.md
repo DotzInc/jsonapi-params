@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.3
+
+* Fix the empty attributes return
+
 ## 0.1.2
 
 * Fix attributes and relationships to force convert rails parameters to a hash.
